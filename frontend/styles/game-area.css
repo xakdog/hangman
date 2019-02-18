@@ -1,0 +1,40 @@
+.game-area {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+
+    margin: auto;
+    height: 100%;
+    max-width: 480px;
+}
+
+.game-area__logo {
+    height: 48px;
+    user-select: none;
+    pointer-events: none;
+}
+
+.game-area__h2 {
+    text-align: center;
+    font-family: 'Arvo', serif;
+    margin-bottom: 0;
+}
+
+.game-area__rules {
+    text-align: center;
+    font-family: 'Arvo', serif;
+}
+
+.game-area__word {
+    display: flex;
+    justify-content: center;
+}
+
+.game-area__mistakes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    min-height: 40px;
+    margin-bottom: 16px;
+}

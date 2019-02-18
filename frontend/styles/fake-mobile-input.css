@@ -1,0 +1,5 @@
+.fake-mobile-input {
+    height: 0.2px;
+    border: none;
+    transform: translateX(-9999px);
+}

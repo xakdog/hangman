@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <title>Hangman</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Gochi+Hand" rel="stylesheet" />
+
+    <link href="./styles/index.css" rel="stylesheet" />
+</head>
+<body class="body">
+
+    <hangman />
+
+    <script src="scripts/guess-area.js"></script>
+
+    <script type="riot/tag" src="components/letter.html"></script>
+    <script type="riot/tag" src="components/fancy-button.tag"></script>
+
+    <script type="riot/tag" src="components/stage-start.tag"></script>
+    <script type="riot/tag" src="components/stage-guess.tag"></script>
+    <script type="riot/tag" src="components/stage-loose.tag"></script>
+    <script type="riot/tag" src="components/stage-win.tag"></script>
+    <script type="riot/tag" src="components/hangman.tag"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/riot@3.13/riot+compiler.min.js"></script>
+
+    <script>riot.mount('hangman')</script>
+</body>
+</html>
