@@ -1,6 +1,6 @@
 <fancy-button>
-    <button class={ className }>
-        <yield />
+    <button class={ className(opts) }>
+        {opts.text}
     </button>
 
     <style>
@@ -36,10 +36,23 @@
     </style>
 
     <script>
-        this.className = "fancy-button";
+        const button = this || {};
 
-        if (opts.disabled) {
-            this.className += " fancy-button_disabled";
+        /**
+         * Generates class list for button.
+         *
+         * @param {object} opts
+         * @param {bool} opts.disabled - is button disabled
+         * @returns {string} list of class names
+         */
+        button.className = function className(opts) {
+            let name = "fancy-button";
+
+            if (opts.disabled) {
+                name += " fancy-button_disabled";
+            }
+
+            return name;
         }
     </script>
 </fancy-button>

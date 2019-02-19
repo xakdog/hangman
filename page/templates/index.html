@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <title>Hangman</title>
+
+    <link rel="icon" type="image/png" href="{% static 'favicon-32x32.png' %}" sizes="32x32" />
+    <link rel="icon" type="image/png" href="{% static 'favicon-16x16.png' %}" sizes="16x16" />
+
+    <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Gochi+Hand" rel="stylesheet" />
+
+    <link href="{% static 'styles/index.css' %}" rel="stylesheet" />
+</head>
+<body class="body">
+
+    <hangman />
+
+    <script>
+        const STATIC_RESOURCES = {
+            hangmanLogo: "{% static 'images/hangman-game.svg' %}"
+        };
+    </script>
+
+    <script type="riot/tag" src="{% static 'components/letter.html' %}"></script>
+    <script type="riot/tag" src="{% static 'components/fancy-button.html' %}"></script>
+
+    <script type="riot/tag" src="{% static 'components/stage-begin.html' %}"></script>
+    <script type="riot/tag" src="{% static 'components/stage-start.html' %}"></script>
+    <script type="riot/tag" src="{% static 'components/stage-guess.html' %}"></script>
+    <script type="riot/tag" src="{% static 'components/stage-loose.html' %}"></script>
+    <script type="riot/tag" src="{% static 'components/stage-win.html' %}"></script>
+    <script type="riot/tag" src="{% static 'components/hangman.html' %}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/riot@3.13/riot+compiler.min.js"></script>
+
+    <script>riot.mount('hangman');</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<hangman>
+    <stage-start
+        if={ stage === 'start' }
+        onBoardCreated={ beginGame }
+    />
+    <stage-guess
+        if={ stage === 'guess' }
+        onDone={ onDone }
+        board={ board }
+    />
+
+    <stage-win if={ stage === 'win' } onBoardCreated={ beginGame } />
+    <stage-loose if={ stage === 'loose' } onBoardCreated={ beginGame } />
+
+    <script>
+        const game = this || {};
+
+        game.stage = 'start';
+
+        /**
+         * Saves board and opens guess screen.
+         *
+         * @param {GameBoard} data
+         */
+        game.beginGame = function hangman(data) {
+            game.board = data;
+            game.stage = 'guess';
+            game.update();
+        };
+
+        /**
+         * Saves board and opens guess screen.
+         *
+         * @param {GameStatus} result
+         */
+        game.onDone = function onDone(result) {
+            if (result === 'win' || result === 'loose') {
+                game.stage = result;
+                game.update();
+            }
+        }
+    </script>
+</hangman>

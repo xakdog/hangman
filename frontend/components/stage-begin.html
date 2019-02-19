@@ -1,0 +1,55 @@
+<stage-begin>
+    <div class="game-area">
+        <img
+            if={ opts.logo }
+            class="game-area__logo"
+            src={ hangmanLogo }
+        />
+
+        <h2 if={ opts.title } class="game-area__h2">{ opts.title }</h2>
+
+        <p class="game-area__buttons">
+            <fancy-button
+                text={ opts.buttontext }
+                disabled={ disabled }
+                onclick={ createBoard }
+            />
+        </p>
+    </div>
+
+    <script>
+        /**
+         * @typedef {object} StageStartOptions
+         * @property {?bool} logo - shows logo.
+         * @property {?string} title - shows title.
+         * @property {string} buttontext - action button text.
+         * @property {Function} onboardcreated - called after game board is created.
+         */
+
+        const API_GAME_START = '/api/board/';
+
+        /**
+         * @type StageStartOptions
+         */
+        const props = opts;
+        const stage = this || {};
+
+        stage.hangmanLogo = STATIC_RESOURCES.hangmanLogo;
+
+        stage.createBoard = function createBoard() {
+            stage.disabled = true;
+            stage.update();
+
+            fetch(API_GAME_START, { method: 'POST' })
+                .then(function(res) {
+                    return res.json();
+                })
+                .then(function (data) {
+                    stage.disabled = false;
+                    stage.update();
+
+                    props.onboardcreated(data);
+                });
+        }
+    </script>
+</stage-begin>

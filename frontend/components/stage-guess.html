@@ -1,0 +1,130 @@
+<stage-guess>
+    <div class="guess-area game-area">
+        <img class="game-area__logo" src={ hangmanLogo } />
+
+        <p class="game-area__rules">
+            Press keys to fill the gaps.<br>
+            You can make only 5 mistakes.
+        </p>
+
+        <input class="fake-mobile-input" type="password" ref="input" />
+
+        <div class="game-area__word">
+            <letter each={ opened } type="box">{ letter }</letter>
+        </div>
+        <div class="game-area__mistakes">
+            <letter each={ mistaken } type="cross-out">{ letter }</letter>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * @typedef {object} StageGuessOptions
+         * @property {GameBoard} board - current game board.
+         * @property {string} static - prefix for static files path.
+         * @property {Function} ondone - callback for ending of game.
+         */
+
+        /**
+         * @typedef {object} GameBoard
+         * @property {string} id - unique identifier of board.
+         * @property {string} opened - string with visible letters.
+         * @property {string} mistakes - string with mistaken letters.
+         */
+
+        /**
+         * @typedef {'win' | 'loose' | 'playing'} GameStatus
+         */
+
+        const SCREEN_CHANGE_DELAY = 1000;
+        const ALLOWED_LETTERS = /^[0-9A-Za-z]$/;
+
+        /**
+         * @type StageGuessOptions
+         */
+        const props = opts;
+        const stage = this || {};
+        const refs = stage.refs || {};
+
+        stage.board = props.board;
+        stage.opened = [];
+        stage.mistaken = [];
+        stage.hangmanLogo = STATIC_RESOURCES.hangmanLogo;
+
+        function asLetters(string) {
+            return string.split('').map((letter) => ({ letter: letter }));
+        }
+
+        /**
+         * Shows game board.
+         *
+         * @param {GameBoard} board
+         */
+        stage.showBoard = function showBoard(board) {
+            stage.opened = asLetters(board.opened);
+            stage.mistaken = asLetters(board.mistakes);
+            stage.update();
+        };
+
+        /**
+         * Ask server if there is such a letter in the word.
+         *
+         * @param {KeyboardEvent} ev
+         */
+        stage.guessLetter = function guessLetter(ev) {
+            const letter = ev.key.toLowerCase();
+            const API_GUESS_URL = `/api/board/${stage.board.id}/letter/`;
+
+            if (!letter.match(ALLOWED_LETTERS)) {
+                return;
+            }
+
+            fetch(API_GUESS_URL, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ letter: letter })
+            }).then(function(result) {
+                return result.json();
+            }).then(function(data) {
+                stage.board = data;
+
+                if (stage.board.status === 'won') {
+                    setTimeout(() => props.ondone('win'), SCREEN_CHANGE_DELAY);
+                }
+
+                if (stage.board.status === 'failed') {
+                    setTimeout(() => props.ondone('loose'), SCREEN_CHANGE_DELAY);
+                }
+
+                stage.showBoard(stage.board);
+            });
+        };
+
+        /**
+         * Subscribes for show and hide of guess stage.
+         */
+        stage.bindEvents = function bindEvents() {
+            stage.on('unmount', function() {
+                document.removeEventListener('keyup', stage.guessLetter);
+            });
+
+            stage.on('mount', function() {
+                stage.showBoard(stage.board);
+
+                document.addEventListener('keyup', stage.guessLetter);
+            });
+
+            document.addEventListener('touchend', function() {
+                if (refs.input) {
+                    refs.input.focus();
+                    refs.input.click();
+                }
+            });
+        };
+
+        stage.bindEvents();
+    </script>
+</stage-guess>
